@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+
+   <head>
+       <title>MeSHmash</title>
+   </head>
+
+   <body>
+
+      <table border = 1>
+
+            <tr>
+               <th>MeSH Term</th>
+               <td> {{ clean_mesh }} </td>
+            </tr>
+
+            <tr>
+               <th>URL for MeSH Term</th>
+               <td> {{ url }} </td>
+            </tr>
+
+            <tr>
+               <th>MeSH Term OR'ed with Entry Terms</th>
+               <td> {{ ored_output }} </td>
+            </tr>
+
+      </table>
+
+      <p><a href='http://hahahammond.pythonanywhere.com/meshmash'>Try another MeSH term!</a></p>
+
+   </body>
+</html>
