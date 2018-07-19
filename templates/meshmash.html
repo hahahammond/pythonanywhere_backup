@@ -38,8 +38,7 @@
             <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Projects</a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
               <a class="dropdown-item" href="http://hahahammond.pythonanywhere.com/meshmash">MeSHmash</a>
-              <a class="dropdown-item" href="#">Something else</a>
-              <a class="dropdown-item" href="#">Something else here</a>
+              <a class="dropdown-item" href="http://hahahammond.pythonanywhere.com/pmidfinder">PMID Finder</a>
             </div>
           </li>
         </ul>
@@ -50,14 +49,14 @@
 
       <div class="starter-template">
         <h1>MeSHmash</h1>
-        <p class="lead">Want to OR a MeSH Term with its Entry Terms? Great!</p>
+        <p class="lead">Want to OR a <a href='https://www.ncbi.nlm.nih.gov/mesh'>MeSH Term</a> with its Entry Terms? Great!</p>
       </div>
 
       <div class="container">
         <form action="/meshmashresult" method="POST">
           <div class="form-group">
             <label for="raw_url">Enter the URL for your MeSH Term:</label>
-            <input type="text" class="form-control" name="raw_url" placeholder="Enter URL">
+            <input type="text" class="form-control" name="raw_url" placeholder="Enter URL, e.g. https://www.ncbi.nlm.nih.gov/mesh/68019637">
           </div>
           <button type = "submit" value="submit" class="btn btn-primary">Submit</button>
         </form>

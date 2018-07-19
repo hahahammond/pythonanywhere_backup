@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Kayla Hammond Larkin</title>
+    <title>PMID Finder</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
@@ -48,8 +48,46 @@
     <main role="main" class="container">
 
       <div class="starter-template">
-        <h1>Hey there!</h1>
-        <p class="lead">This is a collection of my experiments with Python.<br>If you are NOT a medical librarian, proceed at your own risk.</p>
+        <h1>PMID Finder</h1>
+        <p class="lead"><a href='http://hahahammond.pythonanywhere.com/pmidfinder'>Try another profile!</a></p>
+      </div>
+
+      <div class="container">
+
+        <table class="table table-hover">
+          <tbody>
+
+            <tr>
+              <th scope="row">Name</th>
+              <td> {{ person }} </td>
+            </tr>
+
+
+            <tr>
+              <th scope="row">URL for BU Profile page</th>
+              <td> <a href='{{ page_url }}'> {{ page_url }} </a></td>
+            </tr>
+
+
+            <tr>
+              <th scope="row">Number of PMIDs found</th>
+              <td> {{ pmid_counter }} </td>
+            </tr>
+            <tr>
+              <th scope="row">List of PMIDs</th>
+              <!-- <td> {{ pmid_list }} </td> -->
+              <td>
+                {% for pmid in pmid_list -%}
+                    {{ pmid }}
+                    <br>
+                {%- endfor %}
+              </td>
+            </tr>
+
+
+          </tbody>
+        </table>
+
       </div>
 
     </main><!-- /.container -->

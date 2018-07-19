@@ -47,5 +47,44 @@ def meshmashresult():
 
         return render_template("meshmashresult.html",url=url, clean_mesh=clean_mesh, ored_output=ored_output)
 
+@app.route('/pmidfinder')
+def pmidfinder():
+    return render_template('pmidfinder.html')
+
+@app.route('/pmidfinderresult',methods = ['POST', 'GET'])
+def pmidfinderresult():
+    if request.method == 'POST':
+
+        # Get URL for BU Profile page from the form
+        page_url = request.form['page_url']
+
+        # Make request and extract all URLS from page and person's name
+        r = requests.get(page_url)
+        tree = lxml.html.fromstring(r.content)
+        all_urls = tree.xpath('//span/a/@href')
+        person = tree.xpath('//span[@id="ctl00_lbl_main_heading"]/text()')[0]
+
+        # Initiate PubMed URL list
+        pubmed_url_list = []
+
+        # Find URLs pointing to PubMed articles and add to list
+        for url in all_urls:
+            pubmed_url = re.findall('//www.ncbi.nlm.nih.gov/pubmed/.*$', url)
+            if pubmed_url:
+                pubmed_url_list.append(pubmed_url[0])
+
+        # Initiate PMID counter and PMID list
+        pmid_counter = 0
+        pmid_list = []
+
+        # Find PMIDs in PubMed article URLs and update PMID counter
+        for raw_pubmed_url in pubmed_url_list:
+            clean_pubmed_url = raw_pubmed_url.replace('//www.ncbi.nlm.nih.gov/pubmed/', '')
+            pmid_list.append(clean_pubmed_url)
+            pmid_counter += 1
+
+        return render_template("pmidfinderresult.html", person=person, page_url=page_url, pmid_counter=pmid_counter, pmid_list=pmid_list)
+
+
 if __name__ == '__main__':
     app.run(debug = True)
