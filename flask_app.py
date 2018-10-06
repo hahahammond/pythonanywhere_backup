@@ -1,9 +1,12 @@
 # Import libraries
-from flask import Flask, render_template, request
+import os
+from flask import Flask, render_template, flash, request, redirect, url_for, send_from_directory
+from werkzeug.utils import secure_filename
 import lxml.html
 import requests
 import re
 
+# Initialize the Flask application
 app = Flask(__name__)
 
 @app.route('/')
@@ -30,9 +33,13 @@ def meshmashresult():
         # Make request
         r = requests.get(url)
 
-        # Find and clean MeSH Heading
+        # Figure out if URL includes number or term text, then find and clean MeSH Heading
         root = lxml.html.fromstring(r.content)
-        mesh = root.xpath('//h1/text()')
+        term_text = '?term='
+        if term_text in url:
+            mesh = root.xpath('//h1/span/text()')
+        else:
+            mesh = root.xpath('//h1/text()')
         clean_mesh = mesh[0].replace("'", "")
 
         # Find Entry Terms
@@ -84,6 +91,7 @@ def pmidfinderresult():
             pmid_counter += 1
 
         return render_template("pmidfinderresult.html", person=person, page_url=page_url, pmid_counter=pmid_counter, pmid_list=pmid_list)
+
 
 
 if __name__ == '__main__':
