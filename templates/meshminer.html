@@ -6,7 +6,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>PMID Finder</title>
+    <title>MeSH Miner</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
@@ -49,16 +49,24 @@
     <main role="main" class="container">
 
       <div class="starter-template">
-        <h1>PMID Finder</h1>
-        <p class="lead">Find and collect PMIDs referenced in <a href='https://profiles.bu.edu/Search/'>BU Profiles</a>!</p>
+        <h1>MeSH Miner</h1>
+        <p class="lead">Want to tally up the <a href='https://www.ncbi.nlm.nih.gov/mesh'>MeSH Terms</a> from a bunch of PubMed articles? Great!</p>
       </div>
 
       <div class="container">
-        <form action="/pmidfinderresult" method="POST">
+        <form action="/meshminerresult" method="POST">
           <div class="form-group">
-            <label for="page_url">Enter the URL for a BU Profile:</label>
-            <input type="text" class="form-control" name="page_url" placeholder="e.g. https://profiles.bu.edu/Michael.Holick" onfocus="this.placeholder = ''" onblur="this.placeholder = 'e.g. https://profiles.bu.edu/Michael.Holick'">
+            <label for="pmid_entry">Enter one or more PMIDs:</label>
+            <textarea class="form-control" name="pmid_entry" rows="3" placeholder="e.g. 5432063 18922474 16675949 16455493 16175370" onfocus="this.placeholder = ''" onblur="this.placeholder = 'e.g. 5432063 18922474 16675949 16455493 16175370'"></textarea>
+
+        <!--
+            <br>
+            <label for="exampleFormControlFile1">... or upload a file!</label>
+            <input type="file" class="form-control-file" id="exampleFormControlFile1">
           </div>
+        -->
+
+          <br>
           <button type = "submit" value="submit" class="btn btn-primary">Submit</button>
         </form>
       </div>

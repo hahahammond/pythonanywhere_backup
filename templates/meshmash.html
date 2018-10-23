@@ -39,6 +39,7 @@
             <div class="dropdown-menu" aria-labelledby="dropdown01">
               <a class="dropdown-item" href="http://hahahammond.pythonanywhere.com/meshmash">MeSHmash</a>
               <a class="dropdown-item" href="http://hahahammond.pythonanywhere.com/pmidfinder">PMID Finder</a>
+              <a class="dropdown-item" href="http://hahahammond.pythonanywhere.com/meshminer">MeSH Miner</a>
             </div>
           </li>
         </ul>
@@ -56,7 +57,7 @@
         <form action="/meshmashresult" method="POST">
           <div class="form-group">
             <label for="raw_url">Enter the URL for your MeSH Term:</label>
-            <input type="text" class="form-control" name="raw_url" placeholder="Enter URL, e.g. https://www.ncbi.nlm.nih.gov/mesh/68019637">
+            <input type="text" class="form-control" name="raw_url" placeholder="e.g. https://www.ncbi.nlm.nih.gov/mesh/68019637" onfocus="this.placeholder = ''" onblur="this.placeholder = 'e.g. https://www.ncbi.nlm.nih.gov/mesh/68019637'">
           </div>
           <button type = "submit" value="submit" class="btn btn-primary">Submit</button>
         </form>

@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 import lxml.html
 import requests
 import re
+import operator
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -92,6 +93,44 @@ def pmidfinderresult():
 
         return render_template("pmidfinderresult.html", person=person, page_url=page_url, pmid_counter=pmid_counter, pmid_list=pmid_list)
 
+@app.route('/meshminer')
+def meshminer():
+    return render_template('meshminer.html')
+
+@app.route('/meshminerresult',methods = ['POST', 'GET'])
+def meshminerresult():
+    if request.method == 'POST':
+        # Create empty dictionary for MeSH terms
+        mesh_tally = {}
+
+        # Get PMID list from form
+        pmid_str = request.form['pmid_entry']
+        pmid_list = re.findall(r'\d+', pmid_str)
+
+        for pmid in pmid_list:
+            # Assemble URLs for articles
+            url = 'https://www.ncbi.nlm.nih.gov/pubmed/' + str(pmid)
+
+            # Make request
+            r = requests.get(url)
+            root = lxml.html.fromstring(r.content)
+
+            # Find MeSH terms
+            mesh_terms = root.xpath('//li/a[@alsec="mesh"]/text()')
+            for term in mesh_terms:
+                if '/' in term:
+                    term = term.rsplit('/')[0]
+                if '*' in term:
+                    term = term.rsplit('*')[0]
+                if term in mesh_tally.keys():
+                    mesh_tally[term] += 1
+                else:
+                    mesh_tally[term] = 1
+
+        # Sort mesh_tally dictionary by value in ascending order
+        sorted_mesh_tally = sorted(mesh_tally.items(), key=lambda x: (x[1],x[0]), reverse=True)
+
+        return render_template("meshminerresult.html", sorted_mesh_tally=sorted_mesh_tally)
 
 
 if __name__ == '__main__':
