@@ -1,6 +1,17 @@
 <!doctype html>
 <html lang="en">
   <head>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-129030515-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-129030515-1');
+    </script>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -8,9 +19,14 @@
 
     <title>MeSH Miner</title>
 
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+    <!-- Link for browser icon -->
+    <link rel="icon" href="https://media.istockphoto.com/vectors/telescope-icon-vector-illustration-vector-id587201162?k=6&m=587201162&s=612x612&w=0&h=hqO5nNZlX9ghoypN5z4Jm452btqn7gsQTWIhYx6Ozh0="/>
 
+    <!-- CSS stylesheets for Datatables / Bootstrap 4 integration -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.1/css/bootstrap.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.2/css/buttons.bootstrap4.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.bootstrap4.min.css">
 
     <!-- Custom styles for this template -->
     <style>
@@ -22,10 +38,12 @@
           text-align: center;
         }
     </style>
+
   </head>
 
   <body>
 
+    <!-- Nav bar -->
     <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
       <a class="navbar-brand" href="http://hahahammond.pythonanywhere.com/">Kayla Hammond Larkin</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +52,11 @@
 
       <div class="collapse navbar-collapse" id="navbarsExampleDefault">
         <ul class="navbar-nav mr-auto">
+
+          <li class="nav-item">
+            <a class="nav-link" href="http://hahahammond.pythonanywhere.com/contact">Contact</a>
+          </li>
+
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Projects</a>
             <div class="dropdown-menu" aria-labelledby="dropdown01">
@@ -48,6 +71,7 @@
 
     <main role="main" class="container">
 
+      <!-- Page header -->
       <div class="starter-template">
         <h1>MeSH Miner</h1>
         <p class="lead"><a href='http://hahahammond.pythonanywhere.com/meshminer'>Try some more PMIDs!</a></p>
@@ -55,34 +79,56 @@
 
       <div class="container">
 
-        <table class="table table-hover">
-          <tbody>
+        <!-- Table -->
+        <table id="results" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
 
-            <tr>
-              <th scope="row">MeSH Term</th>
-              <th scope="row">Frequency</th>
-            </tr>
-            {% for mesh_term in sorted_mesh_tally %}
-              <tr>
-                <td> {{ mesh_term[0] }} </td>
-                <td> {{ mesh_term[1] }} </td>
-              </tr>
-            {% endfor %}
-
-          </tbody>
+            <thead>
+                <tr>
+                  <th>MeSH Term</th>
+                  <th>Frequency</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mesh_term in sorted_mesh_tally %}
+                  <tr>
+                    <td> {{ mesh_term[0] }} </td>
+                    <td> {{ mesh_term[1] }} </td>
+                  </tr>
+                {% endfor %}
+            </tbody>
         </table>
 
       </div>
 
+    </main>
 
+    <!-- Javascript libraries for Datatables / Bootstrap 4 integration -->
+    <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.print.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.2/js/buttons.colVis.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap4.min.js"></script>
 
-    </main><!-- /.container -->
+    <!-- Datatables script -->
+    <script>
+      $(document).ready(function() {
+          var table = $('#results').DataTable( {
+              lengthChange: false,
+              buttons: [ 'copy', 'excel', 'csv', 'pdf', 'colvis' ]
+          } );
 
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+          table.buttons().container()
+              .appendTo( '#results_wrapper .col-md-6:eq(0)' );
+      } );
+    </script>
+
   </body>
 </html>
