@@ -6,6 +6,7 @@ import lxml.html
 import requests
 import re
 import operator
+import pandas as pd
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -104,20 +105,17 @@ def meshminer():
 @app.route('/meshminerresult',methods = ['POST', 'GET'])
 def meshminerresult():
     if request.method == 'POST':
-        # Create empty dictionary for MeSH terms
-        mesh_tally = {}
+        # Create empty df for MeSH terms data
+        mesh_tally_cols = ['Term','Frequency', 'URL']
+        mesh_tally = pd.DataFrame(columns=mesh_tally_cols)
 
         # Get PMID list from form input
         if request.form['pmid_entry'] != '':
             pmid_str = request.form['pmid_entry']
         else:
-
             test_file = request.files['pmid_file']
             file_content = test_file.read()
             pmid_str=file_content.decode('utf8').replace('\n', ' ')
-
-            # with open(file_content, 'r') as input_file:
-            #     pmid_str=input_file.read().replace('\n', ' ')
 
         pmid_list = re.findall(r'\d+', pmid_str)
 
@@ -136,15 +134,34 @@ def meshminerresult():
                     term = term.rsplit('/')[0]
                 if '*' in term:
                     term = term.rsplit('*')[0]
-                if term in mesh_tally.keys():
-                    mesh_tally[term] += 1
-                else:
-                    mesh_tally[term] = 1
+                if (mesh_tally.Term == term).any():
+                    mesh_tally.loc[mesh_tally.Term == term, 'Frequency'] += 1
+                if not (mesh_tally.Term == term).any():
+                    mesh_tally_dict = {}
+                    mesh_tally_dict['Term'] = term
+                    mesh_tally_dict['Frequency'] = 1
+                    if len(term.split()) > 1:
+                        plussed_term = term.replace(" ", "+")
+                        mesh_tally_dict['URL'] = 'https://www.ncbi.nlm.nih.gov/mesh?term=' + plussed_term
+                    else:
+                        mesh_tally_dict['URL'] =  'https://www.ncbi.nlm.nih.gov/mesh?term=' + term
+                    mesh_tally = mesh_tally.append(mesh_tally_dict, ignore_index=True)
+                    mesh_tally['Frequency'] = mesh_tally['Frequency'].astype(int)
 
-        # Sort mesh_tally dictionary by value in ascending order
-        sorted_mesh_tally = sorted(mesh_tally.items(), key=lambda x: (x[1],x[0]), reverse=True)
 
-        return render_template("meshminerresult.html", sorted_mesh_tally=sorted_mesh_tally)
+
+        #table = BeautifulSoup(mesh_tally.to_html(index=False, classes=['table', 'table-striped', 'table-bordered', 'dt-responsive', 'nowrap']),  'html.parser')
+        #table = BeautifulSoup(mesh_tally.to_html(index=False),  'html.parser')
+        #table.find('table')['id'] = 'results'
+        #table.find('table')['width'] = '100%'
+
+        with pd.option_context('display.max_colwidth', -1):
+            #table = mesh_tally.to_html(table_id = "results", index=False)
+            #table = mesh_tally.to_html(index=False, id = "results', classes=['table', 'table-striped', 'table-bordered', 'dt-responsive', 'nowrap'], table_id="results")
+            #table = mesh_tally.to_html(classes = 'table table-striped table-bordered dt-responsive nowrap" id = "results')
+            table = mesh_tally.to_html(index=False).replace('<table','<table class="table-striped table-bordered dt-responsive nowrap" id="results" style="width:100%;"')
+
+        return render_template("meshminerresult.html", table=table)
 
 
 if __name__ == '__main__':
